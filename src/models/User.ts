@@ -10,7 +10,7 @@ type Usertype = {
     email: string,
     phone: number,
     address: {
-        zipCode: number,
+        zipCode: string,
         country: string,
         city: string,
         district: string,
@@ -41,7 +41,7 @@ const schema = new Schema<Usertype>({
     email: {type: String, required: true},
     phone: {type: Number},
     address: {
-        zipCode: {type: Number},
+        zipCode: {type: String},
         country: {type: String},
         city: {type: String},
         district: {type: String},
