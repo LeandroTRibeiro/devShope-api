@@ -8,7 +8,6 @@ import * as AuthMiddlewares from '../middlewares/Auth';
 import * as WishListController from '../controllers/WishListController';
 import * as BannerController from '../controllers/BannerController';
 import * as CartListController from '../controllers/CartListController';
-import * as CorreiosController from '../controllers/CorreiosController';
 
 import { AuthValidator } from "../validators/AuthValidator";
 import { UserValidator } from "../validators/UserValidator";
@@ -40,8 +39,6 @@ router.post('/cart/add', AuthMiddlewares.privateRoute, CartListController.addToC
 router.post('/cart/get', AuthMiddlewares.privateRoute, CartListController.getCart);
 router.post('/cart/show/cartproducts', AuthMiddlewares.privateRoute, CartListController.getProductCart);
 router.post('/cart/del', AuthMiddlewares.privateRoute, CartListController.deleteToCart);
-
-router.post('/frete', CorreiosController.getDelivery);
 
 router.get('/banner', BannerController.getBanners);
 

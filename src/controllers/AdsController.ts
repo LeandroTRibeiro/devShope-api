@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import cloudinary from 'cloudinary';
 import sharp from "sharp";
 import { unlink } from 'fs/promises';
+import { delivery } from "../services/DeliveryService";
 
 // dotenv.config();
 
@@ -129,6 +130,7 @@ export const getList = async (req: Request, res: Response) => {
 export const getItem = async (req: Request, res: Response) => {
 
     const id = req.params.id as string;
+    const { token } = req.body;
 
     if(!id) {
         res.status(400).json({ error: { product: { msg: 'O produto não existe' } } });
@@ -150,14 +152,39 @@ export const getItem = async (req: Request, res: Response) => {
 
         const others = await adsModel.find({ status: true , category: product.category});
 
+        let deliveryInfo;
+
+        if(token) {
+
+            const user = await userModel.findOne({ token });
+
+            if(user) {
+
+                if(user.address.zipCode) {
+
+                    deliveryInfo = await delivery.getDelivery(product._id, user.address.zipCode);
+
+                } else {
+
+                    deliveryInfo = 'Cliente sem endereço cadastrado';
+                }
+
+            } else {
+                deliveryInfo = 'Token inválido';
+            }
+
+        } else {
+            deliveryInfo = 'Cliente não logado';
+        }
+
         if(others) {
 
-            res.json({product, others});
+            res.json({product, others: others.reverse(), delivery: deliveryInfo});
             
         } else {
 
             const otherCategory = await adsModel.find();
-            res.json({product, otherCategory});
+            res.json({product, others: otherCategory, delivery: deliveryInfo});
         }
 
     } catch(error) {
