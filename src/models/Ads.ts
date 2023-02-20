@@ -23,7 +23,20 @@ export type AdsType = {
     stock: number,
     freeDelivery: boolean,
     characteristics: string[],
-    discount: number
+    discount: number,
+    installment: number,
+    discountWithInstallment: boolean,
+    amount: number,
+    cepOrigin: string,
+    weight: string,
+    format: string,
+    length: string,
+    height: string,
+    width: string,
+    deliveryService: string[],
+    diameter: string
+
+
 };
 
 const schema = new Schema<AdsType>({
@@ -43,7 +56,18 @@ const schema = new Schema<AdsType>({
     stock: {type: Number, required: true, default: 1},
     freeDelivery: {type: Boolean, required: true, default: false},
     characteristics: {type: [String], required: true},
-    discount: {type: Number, required: true, default: 0}
+    discount: {type: Number, required: true, default: 0},
+    installment: {type: Number, required: true, default: 0},
+    discountWithInstallment: {type: Boolean, required: true, default: false},
+    amount: {type: Number, required: false},
+    cepOrigin: {type: String, required: true},
+    weight: {type: String, required: true},
+    format: {type: String, required: true},
+    length: {type: String, required: true},
+    height: {type: String, required: true},
+    width: {type: String, required: true},
+    deliveryService: {type: [String], required: true},
+    diameter: {type: String, required: true}
 });
 
 const modelName = 'Ads';
