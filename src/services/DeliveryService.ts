@@ -21,6 +21,15 @@ export const delivery = {
 
             const deliveryInfo = await calcularPrecoPrazo(args);
 
+            if(deliveryInfo[0].Valor === "0,00") {
+
+                const deliveryError = {
+                    delivery: "Não é possivel entregar neste endereço!"
+                }
+
+                return deliveryError;
+            }
+
             return deliveryInfo;
         }
 

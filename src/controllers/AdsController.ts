@@ -7,6 +7,7 @@ import cloudinary from 'cloudinary';
 import sharp from "sharp";
 import { unlink } from 'fs/promises';
 import { delivery } from "../services/DeliveryService";
+import { consultarCep, PrecoPrazoResponse } from "correios-brasil/dist";
 
 // dotenv.config();
 
@@ -192,6 +193,57 @@ export const getItem = async (req: Request, res: Response) => {
 
     
 };
+
+export const getDeliveryPrice = async (req: Request, res: Response) => {
+
+    const { zipCode, productId } = req.body;
+
+    if(!zipCode) {
+        res.status(400).json({ error: { zipCode: { msg: 'Faltam dados' } } });
+        return;
+    }
+
+    if(!productId) {
+        res.status(400).json({ error: { product: { msg: 'Faltam dados' } } });
+        return;
+    }
+
+    try {
+
+        const zipCodeVerificated = await consultarCep(zipCode);
+
+        try {
+
+
+            const product = await adsModel.findOne({ _id: productId });
+
+            if(product?.freeDelivery) {
+
+                res.status(400).json({ error: { product: { msg: 'frete gratuito!' } } });
+                return;
+
+            } else {
+
+                const deliveryInfo = await delivery.getDelivery(productId, zipCode);
+
+                res.json({deliveryInfo});
+
+            }
+
+        } catch(error) {
+
+            res.status(400).json({ error: { product: { msg: 'produto inválido!' } } });
+            return;
+
+        }
+    } catch(error) {
+
+        res.status(400).json({ error: { zipCode: { msg: 'CEP inválido!' } } });
+        return;
+    }
+
+    
+}
 
 // export const edit = async (req: Request, res: Response) => {
 

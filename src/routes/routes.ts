@@ -49,6 +49,7 @@ router.get('/getcategories', CategoryController.getCategories);
 
 router.get('/ad/getlist', AdsController.getList);
 router.post('/ad/:id', AdsController.getItem);
+router.post('/delivery/price', AdsController.getDeliveryPrice);
 // router.post('/ad/add', AuthMiddlewares.privateRoute, upload.array('avatars', 4), AdsController.add);
 // router.post('/ad/:id', AuthMiddlewares.privateRoute, upload.array('avatars', 4), AdsController.edit);
 
