@@ -153,38 +153,36 @@ export const getItem = async (req: Request, res: Response) => {
         const others = await adsModel.find({ status: true , category: product.category});
 
         let deliveryInfo;
+        let destination;
 
-        if(token) {
+        if(!product.freeDelivery) {
 
-            const user = await userModel.findOne({ token });
+            if(token) {
+    
+                const user = await userModel.findOne({ token });
+    
+                if(user) {
+    
+                    if(user.address.zipCode) {
+    
+                        deliveryInfo = await delivery.getDelivery(product._id, user.address.zipCode);
+                        destination = user.address;
+    
+                    }
 
-            if(user) {
-
-                if(user.address.zipCode) {
-
-                    deliveryInfo = await delivery.getDelivery(product._id, user.address.zipCode);
-
-                } else {
-
-                    deliveryInfo = 'Cliente sem endereço cadastrado';
                 }
-
-            } else {
-                deliveryInfo = 'Token inválido';
+    
             }
-
-        } else {
-            deliveryInfo = 'Cliente não logado';
         }
+
 
         if(others) {
 
-            res.json({product, others: others.reverse(), delivery: deliveryInfo});
+            res.json({product, others: others.reverse(), delivery: deliveryInfo, destination});
             
         } else {
-
             const otherCategory = await adsModel.find();
-            res.json({product, others: otherCategory, delivery: deliveryInfo});
+            res.json({product, others: otherCategory, delivery: deliveryInfo, destination});
         }
 
     } catch(error) {

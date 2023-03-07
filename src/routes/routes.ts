@@ -48,7 +48,7 @@ router.put('/user/edit/address', AddressValidator.editAddress, AuthMiddlewares.p
 router.get('/getcategories', CategoryController.getCategories);
 
 router.get('/ad/getlist', AdsController.getList);
-router.get('/ad/:id', AdsController.getItem);
+router.post('/ad/:id', AdsController.getItem);
 // router.post('/ad/add', AuthMiddlewares.privateRoute, upload.array('avatars', 4), AdsController.add);
 // router.post('/ad/:id', AuthMiddlewares.privateRoute, upload.array('avatars', 4), AdsController.edit);
 
