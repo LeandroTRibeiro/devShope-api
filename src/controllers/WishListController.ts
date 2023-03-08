@@ -4,8 +4,6 @@ import adsModel from "../models/Ads";
 import userModel from "../models/User";
 import wishListModel from "../models/WishList";
 
-
-
 export const addAndRemoveWish = async (req: Request, res: Response) => {
 
     const { token, wish } = req.body;
